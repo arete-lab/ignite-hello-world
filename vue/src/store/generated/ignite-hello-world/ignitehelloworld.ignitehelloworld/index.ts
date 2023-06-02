@@ -42,6 +42,7 @@ function getStructure(template) {
 const getDefaultState = () => {
 	return {
 				Params: {},
+				HelloWorld: {},
 				
 				_Structure: {
 						Params: getStructure(Params.fromPartial({})),
@@ -78,6 +79,12 @@ export default {
 						(<any> params).query=null
 					}
 			return state.Params[JSON.stringify(params)] ?? {}
+		},
+				getHelloWorld: (state) => (params = { params: {}}) => {
+					if (!(<any> params).query) {
+						(<any> params).query=null
+					}
+			return state.HelloWorld[JSON.stringify(params)] ?? {}
 		},
 				
 		getTypeStructure: (state) => (type) => {
@@ -130,6 +137,28 @@ export default {
 				return getters['getParams']( { params: {...key}, query}) ?? {}
 			} catch (e) {
 				throw new Error('QueryClient:QueryParams API Node Unavailable. Could not perform query: ' + e.message)
+				
+			}
+		},
+		
+		
+		
+		
+		 		
+		
+		
+		async QueryHelloWorld({ commit, rootGetters, getters }, { options: { subscribe, all} = { subscribe:false, all:false}, params, query=null }) {
+			try {
+				const key = params ?? {};
+				const queryClient=await initQueryClient(rootGetters)
+				let value= (await queryClient.queryHelloWorld()).data
+				
+					
+				commit('QUERY', { query: 'HelloWorld', key: { params: {...key}, query}, value })
+				if (subscribe) commit('SUBSCRIBE', { action: 'QueryHelloWorld', payload: { options: { all }, params: {...key},query }})
+				return getters['getHelloWorld']( { params: {...key}, query}) ?? {}
+			} catch (e) {
+				throw new Error('QueryClient:QueryHelloWorld API Node Unavailable. Could not perform query: ' + e.message)
 				
 			}
 		},

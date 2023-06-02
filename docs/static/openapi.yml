@@ -28832,6 +28832,38 @@ paths:
           format: uint64
       tags:
         - Query
+  /ignite-hello-world/ignitehelloworld/hello_world:
+    get:
+      summary: Queries a list of HelloWorld items.
+      operationId: IgnitehelloworldIgnitehelloworldHelloWorld
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      tags:
+        - Query
   /ignite-hello-world/ignitehelloworld/params:
     get:
       summary: Parameters queries the parameters of the module.
@@ -49107,6 +49139,11 @@ definitions:
   ignitehelloworld.ignitehelloworld.Params:
     type: object
     description: Params defines the parameters for the module.
+  ignitehelloworld.ignitehelloworld.QueryHelloWorldResponse:
+    type: object
+    properties:
+      message:
+        type: string
   ignitehelloworld.ignitehelloworld.QueryParamsResponse:
     type: object
     properties:

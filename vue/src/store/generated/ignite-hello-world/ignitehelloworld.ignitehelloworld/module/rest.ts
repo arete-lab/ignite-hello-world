@@ -14,6 +14,10 @@
  */
 export type IgnitehelloworldParams = object;
 
+export interface IgnitehelloworldQueryHelloWorldResponse {
+  message?: string;
+}
+
 /**
  * QueryParamsResponse is response type for the Query/Params RPC method.
  */
@@ -229,6 +233,22 @@ export class HttpClient<SecurityDataType = unknown> {
  * @version version not set
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryHelloWorld
+   * @summary Queries a list of HelloWorld items.
+   * @request GET:/ignite-hello-world/ignitehelloworld/hello_world
+   */
+  queryHelloWorld = (params: RequestParams = {}) =>
+    this.request<IgnitehelloworldQueryHelloWorldResponse, RpcStatus>({
+      path: `/ignite-hello-world/ignitehelloworld/hello_world`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
   /**
    * No description
    *

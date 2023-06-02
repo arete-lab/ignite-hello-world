@@ -13,6 +13,12 @@ export interface QueryParamsResponse {
   params: Params | undefined;
 }
 
+export interface QueryHelloWorldRequest {}
+
+export interface QueryHelloWorldResponse {
+  message: string;
+}
+
 const baseQueryParamsRequest: object = {};
 
 export const QueryParamsRequest = {
@@ -110,10 +116,116 @@ export const QueryParamsResponse = {
   },
 };
 
+const baseQueryHelloWorldRequest: object = {};
+
+export const QueryHelloWorldRequest = {
+  encode(_: QueryHelloWorldRequest, writer: Writer = Writer.create()): Writer {
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): QueryHelloWorldRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseQueryHelloWorldRequest } as QueryHelloWorldRequest;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(_: any): QueryHelloWorldRequest {
+    const message = { ...baseQueryHelloWorldRequest } as QueryHelloWorldRequest;
+    return message;
+  },
+
+  toJSON(_: QueryHelloWorldRequest): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial(_: DeepPartial<QueryHelloWorldRequest>): QueryHelloWorldRequest {
+    const message = { ...baseQueryHelloWorldRequest } as QueryHelloWorldRequest;
+    return message;
+  },
+};
+
+const baseQueryHelloWorldResponse: object = { message: "" };
+
+export const QueryHelloWorldResponse = {
+  encode(
+    message: QueryHelloWorldResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.message !== "") {
+      writer.uint32(10).string(message.message);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): QueryHelloWorldResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseQueryHelloWorldResponse,
+    } as QueryHelloWorldResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.message = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryHelloWorldResponse {
+    const message = {
+      ...baseQueryHelloWorldResponse,
+    } as QueryHelloWorldResponse;
+    if (object.message !== undefined && object.message !== null) {
+      message.message = String(object.message);
+    } else {
+      message.message = "";
+    }
+    return message;
+  },
+
+  toJSON(message: QueryHelloWorldResponse): unknown {
+    const obj: any = {};
+    message.message !== undefined && (obj.message = message.message);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryHelloWorldResponse>
+  ): QueryHelloWorldResponse {
+    const message = {
+      ...baseQueryHelloWorldResponse,
+    } as QueryHelloWorldResponse;
+    if (object.message !== undefined && object.message !== null) {
+      message.message = object.message;
+    } else {
+      message.message = "";
+    }
+    return message;
+  },
+};
+
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Parameters queries the parameters of the module. */
   Params(request: QueryParamsRequest): Promise<QueryParamsResponse>;
+  /** Queries a list of HelloWorld items. */
+  HelloWorld(request: QueryHelloWorldRequest): Promise<QueryHelloWorldResponse>;
 }
 
 export class QueryClientImpl implements Query {
@@ -129,6 +241,20 @@ export class QueryClientImpl implements Query {
       data
     );
     return promise.then((data) => QueryParamsResponse.decode(new Reader(data)));
+  }
+
+  HelloWorld(
+    request: QueryHelloWorldRequest
+  ): Promise<QueryHelloWorldResponse> {
+    const data = QueryHelloWorldRequest.encode(request).finish();
+    const promise = this.rpc.request(
+      "ignitehelloworld.ignitehelloworld.Query",
+      "HelloWorld",
+      data
+    );
+    return promise.then((data) =>
+      QueryHelloWorldResponse.decode(new Reader(data))
+    );
   }
 }
 
