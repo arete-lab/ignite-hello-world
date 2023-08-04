@@ -36,6 +36,6 @@ message QuerySayHelloRequest {
 }
 
 message QuerySayHelloResponse {
-  string name = 1
+  string name = 1;
 }
 // this line is used by starport scaffolding # 3
