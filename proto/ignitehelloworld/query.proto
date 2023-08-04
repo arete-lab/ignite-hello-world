@@ -15,6 +15,10 @@ service Query {
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
     option (google.api.http).get = "/ignite-hello-world/ignitehelloworld/params";
   }
+
+  rpc SayHello(QuerySayHelloRequest) returns (QuerySayHelloResponse) {
+    option (google.api.http).get = "/ignite-hello-world/ignitehelloworld/sayhello/{name}";
+  }
   // this line is used by starport scaffolding # 2
 }
 
@@ -27,4 +31,11 @@ message QueryParamsResponse {
   Params params = 1 [(gogoproto.nullable) = false];
 }
 
+message QuerySayHelloRequest {
+  string name = 1;
+}
+
+message QuerySayHelloResponse {
+  string name = 1
+}
 // this line is used by starport scaffolding # 3
