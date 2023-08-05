@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"ignite-hello-world/x/ignitehelloworld/types"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -15,7 +14,7 @@ func (k Keeper) SayHello(goCtx context.Context, req *types.QuerySayHelloRequest)
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
-	ctx := sdk.UnwrapSDKContext(goCtx)
-	_ = ctx
+	// ctx := sdk.UnwrapSDKContext(goCtx)
+	// _ = ctx
 	return &types.QuerySayHelloResponse{Name: fmt.Sprintf("hello %s", req.Name)}, nil
 }
